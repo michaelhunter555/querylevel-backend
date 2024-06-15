@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
@@ -16,15 +17,19 @@ dotenv.config();
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-  next();
-});
+const corsOptions = {
+  origin: [
+    "https://query-level-bbd02bb2f6c4.herokuapp.com",
+    "https://querylevel.com",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
   if (req.originalUrl === "/api/plans/stripe-webhook") {

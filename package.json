@@ -2,10 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.ts",
+    "start": "node dist/app.js",
     "dev": "nodemon app.ts"
   },
   "keywords": [],
@@ -34,5 +35,8 @@
     "nodemon": "^3.1.3",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.12.0"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
