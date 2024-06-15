@@ -17,6 +17,16 @@ dotenv.config();
 
 const app = express();
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://querylevel.com");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
 const corsOptions = {
   origin: [
     // "https://519f5f06cbd0.ngrok.app", // Replace with your frontend origin
@@ -26,9 +36,24 @@ const corsOptions = {
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Handle preflight requests
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 app.use((req, res, next) => {
   if (req.originalUrl === "/api/plans/stripe-webhook") {
