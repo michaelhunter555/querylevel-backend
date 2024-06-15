@@ -177,7 +177,7 @@ export const targetExcludeSubdivisionOperation = async (
   //LOOP 1 BEGINS
   if (result && result.length > 0) {
     result?.forEach((partition: ProductGroupView, i: number) => {
-      console.log(`Started First Loop LINE 180 ${i}`);
+      // console.log(`Started First Loop LINE 180 ${i}`);
       //id of partition
       const nodeId = partition?.ad_group_criterion?.criterion_id;
 
@@ -196,7 +196,7 @@ export const targetExcludeSubdivisionOperation = async (
       //find parent partition of selected 'others' node
       // IF CHECK - LOOP 1
       if (Number(selectedNodeParent) === Number(nodeId)) {
-        console.log("Found Parent Partition at line 200", `${i}`);
+        // console.log("Found Parent Partition at line 200", `${i}`);
         //ROOT Subdivision ID
         selectedEverythingElseParentId = nodeId;
         //get selectedNode (everythingelse node) parent partition object
@@ -205,7 +205,7 @@ export const targetExcludeSubdivisionOperation = async (
         );
 
         if (getParentPartitionInfo) {
-          console.log("Retrieved parentPartition object", `${i}`);
+          // console.log("Retrieved parentPartition object", `${i}`);
           //find parent resource
           const parentResource =
             getParentPartitionInfo?.ad_group_criterion?.listing_group
@@ -225,7 +225,7 @@ export const targetExcludeSubdivisionOperation = async (
       //check which partitions in the tree have the same parentId/resource as the 'others' case
       //STILL IN LOOP 1
       if (parentId === selectedNodeParent) {
-        console.log("ParentId equals the same as selected others", `${i}`);
+        // console.log("ParentId equals the same as selected others", `${i}`);
         //remove partitions
         const childPartitionResource = ResourceNames.adGroupCriterion(
           customer.credentials.customer_id,
@@ -247,7 +247,7 @@ export const targetExcludeSubdivisionOperation = async (
         );
         //only create a new resource if it's not the selectedNode
         if (!shouldSkipNode) {
-          console.log("Checking all nodes except the Selected Node", `${i}`);
+          // console.log("Checking all nodes except the Selected Node", `${i}`);
           //we skip ev-else (selectedNode) because we create it manually.
           //we also re-create 2 nodes in the operation that exist in the current tree (if subdivided deeper)
           // that is childsubdivision node and child subdividision 'others' node.
@@ -313,7 +313,7 @@ export const targetExcludeSubdivisionOperation = async (
                   ?.split("~")
                   .pop();
               //find children
-              console.log("check befory child subdivision", `${i}`);
+              // console.log("check befory child subdivision", `${i}`);
               if (Number(parentId) === childSubdivisionId) {
                 //find the other's node and push into remove array as it shoud not be in there from 1st check
                 if (
@@ -330,10 +330,10 @@ export const targetExcludeSubdivisionOperation = async (
                     ? true
                     : false; //no value provided
 
-                  console.log(
-                    "IS A ChildSubdivisionOthersNode",
-                    childSubdivisionOthersNode
-                  );
+                  // console.log(
+                  //   "IS A ChildSubdivisionOthersNode",
+                  //   childSubdivisionOthersNode
+                  // );
                   // partition?.ad_group_criterion?.listing_group?.case_value
                   // ?.product_item_id?.value === null;
 
@@ -378,7 +378,7 @@ export const targetExcludeSubdivisionOperation = async (
                   grandChildrenPartition.push(
                     partition?.ad_group_criterion?.criterion_id
                   );
-                  console.log("created grandchild", `${i}`);
+                  // console.log("created grandchild", `${i}`);
 
                   const createSubdividedChildPartitions =
                     new resources.AdGroupCriterion({
@@ -483,7 +483,7 @@ export const targetExcludeSubdivisionOperation = async (
     status: enums.AdGroupCriterionStatus.ENABLED,
   });
 
-  //console.log("exclude operation", subdividedNode.listing_group?.case_value);
+  // console.log("exclude operation", subdividedNode.listing_group?.case_value);
 
   //new 'others' node
   const newPartition = new resources.AdGroupCriterion({

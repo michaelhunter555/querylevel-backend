@@ -44,7 +44,7 @@ export const createEverythingElseInBrandNode = (
   adGroupId: string,
   adGroupResource: string,
   otherBrandTempId: number,
-  fixedCpC: string,
+  fixedCpC: string | number,
   parentCriterion: string
 ): resources.IAdGroupCriterion => ({
   resource_name: `customers/${customer}/adGroupCriteria/${adGroupId}~${otherBrandTempId}`,
@@ -67,7 +67,7 @@ export const createProductItemIdNode = (
   adGroupResource: string,
   productTempId: number,
   productId: string,
-  fixedCpC: string,
+  fixedCpC: string | number,
   resource: string
 ): resources.IAdGroupCriterion => ({
   resource_name: `customers/${customer}/adGroupCriteria/${adGroupId}~${productTempId}`,
@@ -91,7 +91,7 @@ export const createEverythingElseNode = (
   adGroupId: string,
   adGroupAdResource: string,
   everythingElseTempId: number,
-  fixedCpC: string,
+  fixedCpC: string | number,
   parentCriterion: string
 ): resources.IAdGroupCriterion => ({
   resource_name: `customers/${customer}/adGroupCriteria/${adGroupId}~${everythingElseTempId}`,

@@ -31,7 +31,7 @@ export const createShoppingCampaign = (
 ) => {
   const campaignData = {
     resource_name: `customers/${customer}/campaigns/${-3}`,
-    name: `${campaign?.name} ${campaign?.priority} Priority`,
+    name: `${campaign?.name} - QL`,
     advertising_channel_type: enums.AdvertisingChannelType.SHOPPING,
     status: campaign?.enabled
       ? enums.CampaignStatus.ENABLED

@@ -131,10 +131,16 @@ export default async function (req: Request, res: Response) {
     );
   }
 
+  const priorityText = {
+    0: "Low",
+    1: "Medium",
+    2: "High",
+  };
+
   const createAdGroup = createAdGroupResource(
     customer?.credentials?.customer_id,
     0,
-    campaignData?.priority,
+    priorityText[campaignData?.priority as keyof typeof priorityText],
     campaignData.name,
     campaignData.costPerClick,
     campaignData.biddingStrategyType === enums.BiddingStrategyType.TARGET_ROAS

@@ -11,7 +11,7 @@ const router = Router();
 
 router.post("/campaign-status-update", campaignStatusUpdate);
 router.post("/create-alpha-beta", createAlphaBeta);
-router.post("create-campaign", createCampaign);
+router.post("/create-campaign", createCampaign);
 router.post("/create-three-tier", createThreeTier);
 router.post("/delete-campaign", deleteCampaign);
 

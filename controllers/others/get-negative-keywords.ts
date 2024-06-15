@@ -32,6 +32,7 @@ export default async function (req: Request, res: Response) {
   ad_group_criterion.negative 
 FROM ad_group_criterion 
 WHERE campaign.id = ${campaignId}
+LIMIT 100
 `;
 
   const campaignQuery = `
@@ -43,7 +44,8 @@ campaign.id,
 campaign.name,
 campaign_criterion.negative
 FROM campaign_criterion
-WHERE campaign.id = ${campaignId}`;
+WHERE campaign.id = ${campaignId}
+LIMIT 100`;
 
   try {
     const [adGroupCriterion, campaignCriterion] = await Promise.all([

@@ -19,8 +19,9 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    "https://0729c473c68f.ngrok.app", // Replace with your frontend origin
-    "https://a5a18273c676.ngrok.app", // Replace with your backend origin
+    "https://519f5f06cbd0.ngrok.app", // Replace with your frontend origin
+    "https://89477cd74c6f.ngrok.app",
+    "https://querylevel-59dc7.web.app", // Replace with your backend origin
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],

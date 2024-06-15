@@ -386,7 +386,7 @@ export default async function (req: Request, res: Response) {
     }
 
     //divisible cpc value
-    const fixedCpC = cpc.toFixed(2);
+    const fixedCpC = Number(cpc.toFixed(2));
 
     const adGroupResource: string[] = adGroupResourceNames[adGroupIndex]?.split(
       "/"
