@@ -21,11 +21,13 @@ const corsOptions = {
   origin: [
     "https://519f5f06cbd0.ngrok.app", // Replace with your frontend origin
     "https://89477cd74c6f.ngrok.app",
-    "https://querylevel.com", // Replace with your backend origin
+    "https://query-level-bbd02bb2f6c4.herokuapp.com",
+    "https://querylevel.com", // Replace with your backend origin https://querylevel.com/
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
