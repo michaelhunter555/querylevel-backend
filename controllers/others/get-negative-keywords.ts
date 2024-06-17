@@ -8,7 +8,6 @@ import { googleError } from "../../util/helpers/googleError";
 
 export default async function (req: Request, res: Response) {
   const { id, keywordLevel, campaignId } = req.query;
-  //console.log("id: ", campaignId);
 
   const user = await findGoogleAuthById(id as string, res);
   const refreshToken = decryptData(user?.refresh_token);
@@ -20,41 +19,44 @@ export default async function (req: Request, res: Response) {
     refresh_token: refreshToken,
   });
 
-  const query = `
-  SELECT 
-  ad_group_criterion.keyword.text, 
-  ad_group_criterion.keyword.match_type, 
-  ad_group_criterion.criterion_id, 
-  ad_group.id, 
-  campaign.id, 
-  campaign.name, 
-  ad_group.name, 
-  ad_group_criterion.negative 
-FROM ad_group_criterion 
-WHERE campaign.id = ${campaignId}
-LIMIT 100
-`;
+  let negativeKeywordQuery: string = "";
 
-  const campaignQuery = `
-SELECT
-campaign_criterion.criterion_id,
-campaign_criterion.keyword.match_type,
-campaign_criterion.keyword.text,
-campaign.id,
-campaign.name,
-campaign_criterion.negative
-FROM campaign_criterion
-WHERE campaign.id = ${campaignId}
-LIMIT 100`;
+  if (keywordLevel === "AD_GROUP") {
+    negativeKeywordQuery = `
+    SELECT 
+    ad_group_criterion.keyword.text, 
+    ad_group_criterion.keyword.match_type, 
+    ad_group_criterion.criterion_id, 
+    ad_group.id, 
+    campaign.id, 
+    campaign.name, 
+    ad_group.name, 
+    ad_group_criterion.negative 
+  FROM ad_group_criterion 
+  WHERE campaign.id = ${campaignId}
+  LIMIT 100
+  `;
+  } else if (keywordLevel === "CAMPAIGN") {
+    negativeKeywordQuery = `
+    SELECT
+    campaign_criterion.criterion_id,
+    campaign_criterion.keyword.match_type,
+    campaign_criterion.keyword.text,
+    campaign.id,
+    campaign.name,
+    campaign_criterion.negative
+    FROM campaign_criterion
+    WHERE campaign.id = ${campaignId}
+    LIMIT 100`;
+  }
 
   try {
-    const [adGroupCriterion, campaignCriterion] = await Promise.all([
-      customer.query(query),
-      customer.query(campaignQuery),
-    ]);
-    // const adGroupCriterion = await customer.query(query);
-    // const campaignCriterion = await customer.query(campaignQuery);
-    res.status(200).json({ adGroupCriterion, campaignCriterion });
+    const response = await customer.query(negativeKeywordQuery);
+    if (keywordLevel === "AD_GROUP") {
+      res.status(200).json({ adGroupCriterion: response, keywordLevel });
+    } else {
+      res.status(200).json({ campaignCriterion: response, keywordLevel });
+    }
   } catch (err) {
     console.log(err);
     if (err instanceof errors.GoogleAdsFailure) {
