@@ -10,6 +10,13 @@ export default async function (req: Request, res: Response) {
   const { id, keywordLevel, campaignId } = req.query;
 
   const user = await findGoogleAuthById(id as string, res);
+
+  if (!user.googleAccountId) {
+    return res
+      .status(400)
+      .json({ message: "Google Id account not found", noAccountId: true });
+  }
+
   const refreshToken = decryptData(user?.refresh_token);
   const accountId = decryptData(user?.googleAccountId);
 

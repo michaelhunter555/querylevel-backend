@@ -9,6 +9,13 @@ export default async function (req: Request, res: Response) {
   const { id } = req.query;
 
   const googleUser = await findGoogleAuthById(id as string, res);
+
+  if (!googleUser.googleAccountId) {
+    return res
+      .status(400)
+      .json({ message: "Google Id account not found", noAccountId: true });
+  }
+
   const accessToken = decryptData(googleUser.access_token);
   const refreshToken = decryptData(googleUser.refresh_token);
   const googleAccountId = decryptData(googleUser.googleAccountId);

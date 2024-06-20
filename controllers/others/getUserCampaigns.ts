@@ -12,6 +12,12 @@ export default async function getUserCampaigns(req: Request, res: Response) {
 
   let googleAccount = await findGoogleAuthById(userId as string, res);
 
+  if (!googleAccount.googleAccountId) {
+    return res
+      .status(400)
+      .json({ message: "Google Id account not found", noAccountId: true });
+  }
+
   const decryptedRefreshToken = decryptData(googleAccount.refresh_token);
   const decryptedAccountId = decryptData(googleAccount.googleAccountId);
   //Create client instance
