@@ -29,12 +29,21 @@ export default async function (req: Request, res: Response) {
         line_items: [{ price: selectedPricePlan, quantity: 1 }],
         mode: "subscription",
         customer: user.stripeCustomerId,
-        success_url: `${req.headers.origin}/manage-subscription?source=stripe`,
-        cancel_url: `${req.headers.origin}/manage-subscription?source=stripe`,
+        success_url: `${req.headers.origin}/manage-subscription`,
+        cancel_url: `${req.headers.origin}/manage-subscription`,
         metadata: {
           userId: user?._id.toString(),
           planType: selectedPlan,
         },
+        ...(user?.planType === "free"
+          ? {
+              discounts: [
+                {
+                  coupon: "oakFBGmh",
+                },
+              ],
+            }
+          : {}),
       });
       res.status(200).json({
         ok: true,
@@ -42,6 +51,7 @@ export default async function (req: Request, res: Response) {
         url: session?.url,
       });
     } catch (err) {
+      console.log(err);
       res.status(500).json({ err });
     }
   } else {

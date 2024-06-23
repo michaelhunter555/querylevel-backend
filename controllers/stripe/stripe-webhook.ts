@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 
+import StripeBilling, { UserBilling } from "../../models/Billing";
 import GoogleAdsAuth from "../../models/GoogleAdsAuth";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -83,10 +84,6 @@ export default async function (req: Request, res: Response) {
             );
             const endPeriod = new Date(subscription?.current_period_end * 1000);
 
-            await GoogleAdsAuth.findOne({
-              stripeCustomerId: String(session.customer),
-            });
-
             if (user) {
               user.planType = session?.metadata?.planType;
               user.accountActive = true;
@@ -114,19 +111,37 @@ export default async function (req: Request, res: Response) {
             stripeCustomerId: invoice.customer,
           });
 
-          if (user && invoice.billing_reason === "subscription_cycle") {
-            //check if user was on pro created a bunch of campaigns then downgraded
-            if (
-              user?.createdCampaigns > user?.campaignQuota &&
-              user?.planType === "growing"
-            ) {
-              const diff = user?.createdCampaigns - 10;
-              user.campaignQuota = Math.max(0, user.campaignQuota - diff);
-            } else {
-              user.campaignQuota = user?.planType === "growing" ? 10 : 25;
-            }
-            user.createdCampaigns = 0;
+          //create new billing object for transaction
+          const newBillingData: Partial<UserBilling> = {
+            stripeCustomerId: invoice.customer as string,
+            amountPaid: invoice.amount_paid,
+            billingReason: invoice.billing_reason as string,
+            chargeId: invoice.charge as string,
+            periodEnd: invoice.period_end * 1000,
+            periodStart: invoice.period_start * 1000,
+            invoiceUrl: invoice.hosted_invoice_url as string,
+            currency: invoice.currency as string,
+          };
 
+          const newStripeBilling = new StripeBilling(newBillingData);
+
+          await newStripeBilling.save();
+
+          if (user) {
+            user.billingHistory.push(newStripeBilling?._id);
+            if (invoice.billing_reason === "subscription_cycle") {
+              //check if user was on pro created a bunch of campaigns then downgraded
+              if (
+                user?.createdCampaigns > user?.campaignQuota &&
+                user?.planType === "growing"
+              ) {
+                const diff = user?.createdCampaigns - 10;
+                user.campaignQuota = Math.max(0, user.campaignQuota - diff);
+              } else {
+                user.campaignQuota = user?.planType === "growing" ? 10 : 25;
+              }
+              user.createdCampaigns = 0;
+            }
             await user.save();
           }
         }

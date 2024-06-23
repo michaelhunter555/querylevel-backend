@@ -38,7 +38,7 @@ export default async function (req: Request, res: Response) {
       },
     };
 
-    //remove node
+    //update cpc, mutable - no need to remove first
     try {
       await customer.mutateResources([updateCpcBid]);
       res.status(200).json({ ok: true });
