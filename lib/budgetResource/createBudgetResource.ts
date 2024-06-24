@@ -15,7 +15,7 @@ export const createCampaignBudget = (
 
   return {
     resource_name: budgetResource,
-    name: budget?.name,
+    name: `${budget?.name} ${new Date()}`,
     amount_micros: toMicros(Number(budget?.amountMicros)),
     delivery_method: budget?.deliveryMethod,
     explicitly_shared: budget?.explicitlyShared,

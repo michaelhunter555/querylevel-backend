@@ -442,12 +442,13 @@ export default async function (req: Request, res: Response) {
       "I pre-created a set of errors for you to get an idea of what's wrong and where. Goodluck!",
       err
     );
+    let googleErrMessage =
+      "An unknown error has occured. Please try again and if the issue continues, contact support.";
     if (err instanceof errors.GoogleAdsFailure) {
       googleError(err);
+      googleErrMessage = err.errors[0].message || googleErrMessage;
     }
-    return res
-      .status(500)
-      .json({ message: "Failed to create Campaign.", ok: false });
+    return res.status(500).json({ message: googleErrMessage, ok: false });
   }
 
   // user.createdCampaigns = user.createdCampaigns += 1;

@@ -247,9 +247,11 @@ export default async function (req: Request, res: Response) {
       .json({ message: "Campaign created successfully.", ok: true });
   } catch (err) {
     console.log(err);
+    let googleMessage: string = "An Unknown Error has occurred.";
     if (err instanceof errors.GoogleAdsFailure) {
       googleError(err);
+      googleMessage = (err.errors[0].message as string) || googleMessage;
     }
-    return res.status(500).json({ message: "Failed to create Campaign." });
+    return res.status(500).json({ message: googleMessage });
   }
 }

@@ -338,10 +338,13 @@ export default async function (req: Request, res: Response) {
       "I pre-created a set of errors for you to get an idea of what's wrong and where... :). Goodluck!",
       err
     );
+    let googleErrMessage =
+      "An unknown error has occured. Please try again and if the issue continues, contact support.";
     if (err instanceof errors.GoogleAdsFailure) {
       googleError(err);
+      googleErrMessage = err.errors[0].message || googleErrMessage;
     }
-    return res.status(500).json({ message: "Failed to create Campaign." });
+    return res.status(500).json({ message: googleErrMessage });
   }
 
   let adGroupResourceNames = response?.mutate_operation_responses
@@ -508,14 +511,17 @@ export default async function (req: Request, res: Response) {
       await user.save();
     }
     res.status(201).json({
-      message: "Three-tiers with Product groups Created Successfully",
+      message: "Three-tiers with Product groups created successfully",
       ok: true,
     });
   } catch (err) {
     console.log(err);
+    let googleErrMessage =
+      "An unknown error has occured. Please try again and if the issue continues, contact support.";
     if (err instanceof errors.GoogleAdsFailure) {
       googleError(err);
+      googleErrMessage = err.errors[0].message || googleErrMessage;
     }
-    res.status(500).json({ message: "Partitions Failed", ok: false });
+    res.status(500).json({ message: googleErrMessage, ok: false });
   }
 }
