@@ -50,6 +50,7 @@ export default async function (req: Request, res: Response) {
         AND campaign.id = ${campaignId}
     ORDER by
         metrics.clicks ASC
+    LIMIT 100
     `;
 
   let result;

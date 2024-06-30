@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 
-import StripeBilling, { UserBilling } from "../../models/Billing";
+import Billing, { UserBilling } from "../../models/Billing";
+import StripeBilling from "../../models/Billing";
 import GoogleAdsAuth from "../../models/GoogleAdsAuth";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -36,10 +37,11 @@ export default async function (req: Request, res: Response) {
             );
             user.accountActive = true;
             user.stripeSubscriptionId = subscription.id;
+
             if (subscription?.metadata?.planType) {
-              user.planType = subscription.metadata.planType;
               user.campaignQuota =
-                subscription?.metadata?.planType === "growing" ? 10 : 25; //campaignQuota
+                subscription?.metadata?.planType === "growing" ? 10 : 15; //campaignQuota
+              user.planType = subscription.metadata.planType;
             }
             try {
               await user.save();
@@ -62,6 +64,7 @@ export default async function (req: Request, res: Response) {
             user.cleanUpService = false;
             user.campaignQuota = 0;
             user.planType = "canceled";
+            user.createdCampaigns = 0;
             await user.save();
           }
         }
@@ -74,6 +77,36 @@ export default async function (req: Request, res: Response) {
             stripeCustomerId: String(session?.customer),
           });
 
+          //handles individual purchase events
+          if (session.payment_intent && session.payment_status === "paid") {
+            // await stripe.invoices.sendInvoice(session.id);
+
+            const purchaseData: Partial<UserBilling> = {
+              stripeCustomerId: String(session?.customer),
+              amountPaid: Number(session?.amount_total),
+              chargeId: String(session?.payment_intent),
+              periodStart: session?.created * 1000,
+              periodEnd: 0,
+              invoiceUrl: "",
+              currency: String(session?.currency),
+            };
+            const newPurchase = new Billing(purchaseData);
+            await newPurchase.save();
+
+            //if user !== canceled || free... user === 'growing' || user === 'pro'
+            if (user && session?.metadata?.planType === "payAsYouGo") {
+              if (user.planType === "free" || user.planType === "canceled") {
+                user.planType = session.metadata.planType;
+              }
+              user.campaignQuota = user.campaignQuota += Number(
+                session.metadata.quantity
+              );
+              user.accountActive = true;
+              await user.save();
+            }
+          }
+
+          //handles subscription events
           if (session.subscription && session.payment_status === "paid") {
             const subscription = await stripe.subscriptions.retrieve(
               session?.subscription as string
@@ -93,11 +126,25 @@ export default async function (req: Request, res: Response) {
               user.planExpiryDate = endPeriod;
 
               if (session?.metadata?.planType === "pro") {
-                user.campaignQuota = 25;
+                //if metadata.prevPlanPayAsGo ? user.campaign = user.campaign += 15 : user.campaign = 15;
+                if (session?.metadata?.oldPlanType === "payAsYouGo") {
+                  //payAsYouGo
+                  user.campaignQuota =
+                    Number(session?.metadata?.oldQuantity) + 15;
+                } else {
+                  user.campaignQuota = 15;
+                }
                 user.cleanUpService = true;
               } else if (session?.metadata?.planType === "growing") {
-                user.campaignQuota = 10;
+                //if metadata.prevPlanPayAsGo ? user.campaign = user.campaign += 10 : user.campaign = 10;
+                if (session?.metadata?.oldPlanType === "payAsYouGo") {
+                  user.campaignQuota =
+                    Number(session?.metadata?.oldQuantity) + 10;
+                } else {
+                  user.campaignQuota = 10;
+                }
               }
+
               await user.save();
             }
           }
@@ -129,6 +176,7 @@ export default async function (req: Request, res: Response) {
 
           if (user) {
             user.billingHistory.push(newStripeBilling?._id);
+
             if (invoice.billing_reason === "subscription_cycle") {
               //check if user was on pro created a bunch of campaigns then downgraded
               if (
@@ -138,7 +186,7 @@ export default async function (req: Request, res: Response) {
                 const diff = user?.createdCampaigns - 10;
                 user.campaignQuota = Math.max(0, user.campaignQuota - diff);
               } else {
-                user.campaignQuota = user?.planType === "growing" ? 10 : 25;
+                user.campaignQuota = user?.planType === "growing" ? 10 : 15;
               }
               user.createdCampaigns = 0;
             }

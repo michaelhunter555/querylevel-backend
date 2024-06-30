@@ -47,5 +47,9 @@ export default async function (req: Request, res: Response) {
       }
       res.status(500).json({ message: err, ok: false });
     }
+  } else {
+    res
+      .status(404)
+      .json({ message: "No campaign Ids found in operation", ok: false });
   }
 }

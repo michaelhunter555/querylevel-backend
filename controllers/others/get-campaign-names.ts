@@ -43,20 +43,22 @@ export default async function (req: Request, res: Response) {
   let result;
   try {
     result = await customer.query(query);
+    const names = result?.map((campaign) => {
+      const name = campaign?.campaign?.name;
+      const id = campaign?.campaign?.id;
+
+      return `${name}:${id}`;
+    });
+    const campaignNames = [...new Set(names)];
+
+    res.status(200).json({ campaignNames: campaignNames });
   } catch (err) {
     console.log("There was an error with the query.", err);
+    let googleErrorMessage = "An unknown Error has occurred. Please try again.";
     if (err instanceof errors.GoogleAdsFailure) {
       googleError(err);
+      googleErrorMessage = err?.errors[0]?.message || googleErrorMessage;
     }
+    res.status(500).json({ message: googleErrorMessage, ok: false });
   }
-
-  const names = result?.map((campaign) => {
-    const name = campaign?.campaign?.name;
-    const id = campaign?.campaign?.id;
-
-    return `${name}:${id}`;
-  });
-  const campaignNames = [...new Set(names)];
-
-  res.status(200).json({ campaignNames: campaignNames });
 }

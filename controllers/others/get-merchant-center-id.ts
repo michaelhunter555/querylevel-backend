@@ -18,10 +18,16 @@ export default async function (req: Request, res: Response) {
   const decryptedRefreshToken = decryptData(user.refresh_token);
   const decryptedAccountId = decryptData(user.googleAccountId);
 
-  const merchantCenterId = await getMerchantCenterId(
-    decryptedRefreshToken,
-    decryptedAccountId
-  );
+  try {
+    const merchantCenterId = await getMerchantCenterId(
+      decryptedRefreshToken,
+      decryptedAccountId
+    );
 
-  res.status(200).json({ resourceNames: merchantCenterId });
+    res.status(200).json({ resourceNames: merchantCenterId });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving Merchant Center Id.", ok: false });
+  }
 }

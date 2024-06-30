@@ -4,8 +4,8 @@ import Stripe from "stripe";
 import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
 
 export default async function (req: Request, res: Response) {
-  const { id, prevPlan } = req.query;
-  const { selectedPlan, selectedPricePlan } = req.body;
+  const { id } = req.query;
+  const { quantity } = req.body;
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2024-04-10",
@@ -22,28 +22,26 @@ export default async function (req: Request, res: Response) {
     await user.save();
   }
 
+  const singleTierPurchase = "price_1PSD6MP3CMhEecSy5kwmRGfj";
+  const firstTimeCoupon = "KX46ndsV"; //buy 2 get 2 free
+
   if (user?.stripeCustomerId) {
     try {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
-        line_items: [{ price: selectedPricePlan, quantity: 1 }],
-        mode: "subscription",
+        line_items: [{ price: singleTierPurchase, quantity: quantity }],
+        mode: "payment",
         customer: user.stripeCustomerId,
         success_url: `${req.headers.origin}/manage-subscription`,
         cancel_url: `${req.headers.origin}/manage-subscription`,
         metadata: {
           userId: user?._id.toString(),
-          planType: selectedPlan,
-          oldPlanType: prevPlan as string,
-          oldQuantity: user?.campaignQuota,
+          planType: "payAsYouGo",
+          quantity: quantity,
         },
-        ...(user?.planType === "free"
+        ...(user?.planType === "free" && quantity >= 4
           ? {
-              discounts: [
-                {
-                  coupon: "oakFBGmh",
-                },
-              ],
+              discounts: [{ coupon: firstTimeCoupon }],
             }
           : {}),
       });

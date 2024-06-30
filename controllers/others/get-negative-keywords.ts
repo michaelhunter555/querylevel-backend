@@ -7,7 +7,7 @@ import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
 import { googleError } from "../../util/helpers/googleError";
 
 export default async function (req: Request, res: Response) {
-  const { id, keywordLevel, campaignId } = req.query;
+  const { id, keywordLevel, campaignId, pageToken } = req.query;
 
   const user = await findGoogleAuthById(id as string, res);
 
@@ -59,6 +59,7 @@ export default async function (req: Request, res: Response) {
 
   try {
     const response = await customer.query(negativeKeywordQuery);
+
     if (keywordLevel === "AD_GROUP") {
       res.status(200).json({ adGroupCriterion: response, keywordLevel });
     } else {
@@ -69,6 +70,8 @@ export default async function (req: Request, res: Response) {
     if (err instanceof errors.GoogleAdsFailure) {
       googleError(err);
     }
-    res.status(500).json({ message: "Error" });
+    res.status(500).json({
+      message: `Error retrieving negative keywords at ${keywordLevel}`,
+    });
   }
 }

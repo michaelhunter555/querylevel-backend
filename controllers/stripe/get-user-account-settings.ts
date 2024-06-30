@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 
-import StripeBilling from "../../models/Billing";
 import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -14,10 +13,6 @@ export default async function (req: Request, res: Response) {
   let user = await findGoogleAuthById(id as string, res);
 
   let currentInvoice: number = 0;
-
-  const charges = await StripeBilling.find({
-    stripeCustomerId: user?.stripeCustomerId,
-  });
 
   if (user?.stripeSubscriptionId && user?.planType !== "canceled") {
     const userSub = await stripe.subscriptions.list({
@@ -62,7 +57,6 @@ export default async function (req: Request, res: Response) {
       user: userSettings,
       ok: true,
       amountDue: currentInvoice,
-      charges: charges,
     });
   } catch (err) {
     res
