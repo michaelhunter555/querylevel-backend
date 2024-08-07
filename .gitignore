@@ -30,6 +30,8 @@ env
 .env
 env.local
 
+# new relic
+newrelic_agent.log
 
 # vercel
 .vercel

@@ -5,6 +5,8 @@ import { decryptData } from "../../util/encryption/decryptData";
 import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
 import { getMerchantCenterId } from "../../util/helpers/getMerchantCenterId";
 
+export { content_v2_1 } from "googleapis/build/src/apis/content/v2.1";
+
 export default async function (req: Request, res: Response) {
   const { brand, id } = req.query;
 

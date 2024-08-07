@@ -1,11 +1,14 @@
-import { Request, Response } from "express";
-import { errors } from "google-ads-api";
+import {
+  Request,
+  Response,
+} from 'express';
+import { errors } from 'google-ads-api';
 
-import { getClient } from "../../lib/getClient";
-import { decryptData } from "../../util/encryption/decryptData";
-import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
-import { googleError } from "../../util/helpers/googleError";
-import { getCurrentAdSchedule } from "../../util/queries/queries";
+import { getClient } from '../../lib/getClient';
+import { decryptData } from '../../util/encryption/decryptData';
+import { findGoogleAuthById } from '../../util/helpers/findGoogleAuthById';
+import { googleError } from '../../util/helpers/googleError';
+import { getCurrentAdSchedule } from '../../util/queries/queries';
 
 export default async function (req: Request, res: Response) {
   const { id, campaignId } = req.query;

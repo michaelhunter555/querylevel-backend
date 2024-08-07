@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response } from 'express';
 import {
   common,
   Customer,
@@ -8,10 +8,10 @@ import {
   ResourceNames,
   resources,
   toMicros,
-} from "google-ads-api";
+} from 'google-ads-api';
 
-import { AdGroupCriterionResource } from "../../../types";
-import { googleError } from "../googleError";
+import { AdGroupCriterionResource } from '../../../types';
+import { googleError } from '../googleError';
 
 type ProductGroupView = {
   ad_group_criterion: AdGroupCriterion;
@@ -114,7 +114,6 @@ export const targetExcludeSubdivisionOperation = async (
   tempOthersResource: string,
   res: Response
 ) => {
-  console.log("This function RAN");
   //adGroup id
   const adGroupId = Number(selectedNode?.adGroupResource.split("/")[3]);
   //where we will re-create our current tree
@@ -430,7 +429,7 @@ export const targetExcludeSubdivisionOperation = async (
 
           //so only UNIT nodes should be processed through here - immediate children of the selectedNodeParent (everythingelse node)
           if (!isAGrandChild) {
-            console.log("unit node children of the root node", `${i}`);
+            //console.log("unit node children of the root node", `${i}`);
             const createChildPartitions = new resources.AdGroupCriterion({
               resource_name: ImmediateChildrenResource,
               ad_group: selectedNode?.adGroupResource,
@@ -533,7 +532,7 @@ export const targetExcludeSubdivisionOperation = async (
       createUpdatedPartitionOperation,
       ...cloneProductTreeOperation,
     ]);
-    console.log("SUCCESS!");
+    //console.log("SUCCESS!");
     res.status(200).json({ ok: true });
   } catch (err) {
     console.log(err);

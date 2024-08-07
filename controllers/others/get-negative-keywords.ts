@@ -7,7 +7,7 @@ import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
 import { googleError } from "../../util/helpers/googleError";
 
 export default async function (req: Request, res: Response) {
-  const { id, keywordLevel, campaignId, pageToken } = req.query;
+  const { id, keywordLevel, campaignId } = req.query;
 
   const user = await findGoogleAuthById(id as string, res);
 
