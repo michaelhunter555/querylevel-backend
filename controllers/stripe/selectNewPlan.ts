@@ -41,7 +41,7 @@ export default async function (req: Request, res: Response) {
           ? {
               discounts: [
                 {
-                  coupon: "oakFBGmh",
+                  coupon: "yb1mgiit",
                 },
               ],
             }

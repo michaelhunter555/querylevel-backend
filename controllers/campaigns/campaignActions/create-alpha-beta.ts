@@ -93,7 +93,7 @@ export default async function (req: Request, res: Response) {
   }
   // *****END OF PHASE 1*******//
 
-  // PHASE 2: CREATE SHARED BUDGET & THREE CAMPAIGNS
+  // PHASE 2: CREATE SHARED BUDGET & TWO CAMPAIGNS
   // FOR EACH CAMPAIGN WE WILL ASSIGN A UNIQUE TEMP RESOURCE ID
   // AND LATER CORRELATE THIS WITH AD GROUP OPERATIONS
   /***************************************
@@ -450,17 +450,4 @@ export default async function (req: Request, res: Response) {
     }
     return res.status(500).json({ message: googleErrMessage, ok: false });
   }
-
-  // user.createdCampaigns = user.createdCampaigns += 1;
-
-  // try {
-  //   await GoogleAdsAuth.findByIdAndUpdate(id, {
-  //     createdCampaigns: user.createdCampaigns,
-  //   });
-  // } catch (err) {
-  //   console.log(err);
-  //   return res
-  //     .status(500)
-  //     .json({ message: "Error updating campaign creation total" });
-  // }
 }

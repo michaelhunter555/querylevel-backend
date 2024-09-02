@@ -40,7 +40,7 @@ export default async function (req: Request, res: Response) {
 
             if (subscription?.metadata?.planType) {
               user.campaignQuota =
-                subscription?.metadata?.planType === "growing" ? 10 : 15; //campaignQuota
+                subscription?.metadata?.planType === "growing" ? 10 : Infinity; //campaignQuota//Infinity
               user.planType = subscription.metadata.planType;
             }
             try {
@@ -127,13 +127,7 @@ export default async function (req: Request, res: Response) {
 
               if (session?.metadata?.planType === "pro") {
                 //if metadata.prevPlanPayAsGo ? user.campaign = user.campaign += 15 : user.campaign = 15;
-                if (session?.metadata?.oldPlanType === "payAsYouGo") {
-                  //payAsYouGo
-                  user.campaignQuota =
-                    Number(session?.metadata?.oldQuantity) + 15;
-                } else {
-                  user.campaignQuota = 15;
-                }
+                user.campaignQuota = Infinity;
                 user.cleanUpService = true;
               } else if (session?.metadata?.planType === "growing") {
                 //if metadata.prevPlanPayAsGo ? user.campaign = user.campaign += 10 : user.campaign = 10;
@@ -186,7 +180,8 @@ export default async function (req: Request, res: Response) {
                 const diff = user?.createdCampaigns - 10;
                 user.campaignQuota = Math.max(0, user.campaignQuota - diff);
               } else {
-                user.campaignQuota = user?.planType === "growing" ? 10 : 15;
+                user.campaignQuota =
+                  user?.planType === "growing" ? 10 : Infinity;
               }
               user.createdCampaigns = 0;
             }
@@ -197,6 +192,7 @@ export default async function (req: Request, res: Response) {
       case "invoice.payment_failed":
         {
           console.log("Invoice.payment_failed");
+          //
         }
         break;
       default:

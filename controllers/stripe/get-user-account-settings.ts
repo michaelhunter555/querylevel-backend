@@ -1,7 +1,10 @@
-import { Request, Response } from "express";
-import Stripe from "stripe";
+import {
+  Request,
+  Response,
+} from 'express';
+import Stripe from 'stripe';
 
-import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
+import { findGoogleAuthById } from '../../util/helpers/findGoogleAuthById';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-04-10",
@@ -37,6 +40,7 @@ export default async function (req: Request, res: Response) {
     await user.save();
   }
 
+  //create a site managed trial offer
   const userSettings = {
     userId: user?._id,
     lastBillingDate: user?.startPlan,

@@ -22,8 +22,8 @@ export default async function (req: Request, res: Response) {
     await user.save();
   }
 
-  const singleTierPurchase = "price_1PSD6MP3CMhEecSy5kwmRGfj";
-  const firstTimeCoupon = "KX46ndsV"; //buy 2 get 2 free
+  const singleTierPurchase = "price_1PtyD7P3CMhEecSyNoIzVGRS";
+  const firstTimeCoupon = "LVty7cpN"; //buy 2 get 2 free
 
   if (user?.stripeCustomerId) {
     try {
