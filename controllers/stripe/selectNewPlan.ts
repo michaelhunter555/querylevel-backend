@@ -7,6 +7,7 @@ export default async function (req: Request, res: Response) {
   const { id, prevPlan } = req.query;
   const { selectedPlan, selectedPricePlan } = req.body;
 
+  //FOR TESTING use => process.env.STRIPE_TEST_SECRET_KEY
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2024-04-10",
   });
@@ -41,6 +42,8 @@ export default async function (req: Request, res: Response) {
           ? {
               discounts: [
                 {
+                  //TEST MODE: oakFBGmh
+                  //LIVE: yb1mgiit
                   coupon: "yb1mgiit",
                 },
               ],

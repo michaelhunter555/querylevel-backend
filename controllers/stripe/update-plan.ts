@@ -7,6 +7,7 @@ export default async function (req: Request, res: Response) {
   const { id } = req.query;
   const { newPriceId, newPlanName } = req.body;
 
+  //FOR TESTING use => process.env.STRIPE_TEST_SECRET_KEY
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2024-04-10",
   });

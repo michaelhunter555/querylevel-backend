@@ -7,6 +7,7 @@ export default async function (req: Request, res: Response) {
   const { id } = req.query;
   const { quantity } = req.body;
 
+  //FOR TESTING use => process.env.STRIPE_TEST_SECRET_KEY
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2024-04-10",
   });
@@ -21,7 +22,8 @@ export default async function (req: Request, res: Response) {
     user.stripeCustomerId = createCustomer.id;
     await user.save();
   }
-
+  //TEST: "price_1PSD6MP3CMhEecSy5kwmRGfj"
+  //LIVE: "price_1PtyD7P3CMhEecSyNoIzVGRS"
   const singleTierPurchase = "price_1PtyD7P3CMhEecSyNoIzVGRS";
   const firstTimeCoupon = "LVty7cpN"; //buy 2 get 2 free
 

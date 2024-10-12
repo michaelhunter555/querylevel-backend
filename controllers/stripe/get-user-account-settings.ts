@@ -1,11 +1,9 @@
-import {
-  Request,
-  Response,
-} from 'express';
-import Stripe from 'stripe';
+import { Request, Response } from "express";
+import Stripe from "stripe";
 
-import { findGoogleAuthById } from '../../util/helpers/findGoogleAuthById';
+import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
 
+//FOR TESTING use => process.env.STRIPE_TEST_SECRET_KEY
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-04-10",
 });
@@ -44,7 +42,7 @@ export default async function (req: Request, res: Response) {
   const userSettings = {
     userId: user?._id,
     lastBillingDate: user?.startPlan,
-    nextBillingDate: user.planExpiryDate,
+    nextBillingDate: user?.planExpiryDate,
     name: user?.name,
     cleanUpService: user.cleanUpService,
     totalCampaignsCreated: user?.createdCampaigns,

@@ -5,6 +5,7 @@ import Billing, { UserBilling } from "../../models/Billing";
 import StripeBilling from "../../models/Billing";
 import GoogleAdsAuth from "../../models/GoogleAdsAuth";
 
+//FOR TESTING use => process.env.STRIPE_TEST_SECRET_KEY
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-04-10",
 });
@@ -17,6 +18,7 @@ export default async function (req: Request, res: Response) {
     event = stripe.webhooks.constructEvent(
       req.body,
       sig as string,
+      //FOR TESTING use => process.env.STRIPE_TEST_WEBHOOK_SECRET
       String(process.env.STRIPE_WEBHOOK_SECRET)
     );
 

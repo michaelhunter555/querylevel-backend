@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 
+//FOR TESTING use => process.env.STRIPE_TEST_SECRET_KEY
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export default async function (req: Request, res: Response) {

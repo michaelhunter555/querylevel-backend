@@ -21,6 +21,8 @@ const corsOptions = {
   origin: [
     "https://query-level-bbd02bb2f6c4.herokuapp.com",
     "https://querylevel.com",
+    "https://509764d3e47f.ngrok.app",
+    "https://255a408416fe.ngrok.app",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],

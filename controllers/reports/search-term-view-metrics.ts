@@ -49,7 +49,7 @@ export default async function (req: Request, res: Response) {
         AND segments.date DURING ${segment}
         AND campaign.id = ${campaignId}
     ORDER by
-        metrics.clicks ASC
+        metrics.clicks DESC
     LIMIT 100
     `;
 
