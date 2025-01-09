@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+import getAllProducts from "../../controllers/others/get-all-products";
 import getAppAnalytics from "../../controllers/others/get-app-analytics";
 import getCampaignAdSchedule from "../../controllers/others/get-campaign-ad-schedule";
 import getCampaignNames from "../../controllers/others/get-campaign-names";
@@ -7,6 +8,7 @@ import getConversionData from "../../controllers/others/get-conversion-data"; //
 import getEditableCampaign from "../../controllers/others/get-editable-campaign";
 import getListingScope from "../../controllers/others/get-listing-scope";
 import getMerchantCenterId from "../../controllers/others/get-merchant-center-id";
+import getAllProductTypes from "../../controllers/others/get-merchant-product-types";
 import getNegativeKeywords from "../../controllers/others/get-negative-keywords";
 import getPortfolioStrategies from "../../controllers/others/get-portfolio-strategies";
 import getResourceNames from "../../controllers/others/get-resource-names";
@@ -23,6 +25,7 @@ import toggleTheme from "../../controllers/others/toggle-theme";
 const router = Router();
 
 router.get("/get-app-analytics", getAppAnalytics);
+router.get("/get-all-products", getAllProducts);
 router.get("/get-campaign-ad-schedule", getCampaignAdSchedule);
 router.get("/get-campaign-names", getCampaignNames);
 router.get("/get-conversion-data", getConversionData);
@@ -40,6 +43,7 @@ router.get("/getMerchantsProductsData", getMerchantsProductsData);
 router.get("/getUserAdGroups", getUserAdGroups);
 router.get("/getUserCampaigns", getUserCampaigns);
 router.get("/inventory-filter", inventoryFilter);
+router.get("/get-product-types", getAllProductTypes);
 
 //post
 router.post("/toggle-theme", toggleTheme);

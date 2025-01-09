@@ -47,7 +47,7 @@ export default async function (req: Request, res: Response) {
   try {
     const { data } = await content.products.list({
       merchantId: `${merchId}`,
-      maxResults: 100,
+      maxResults: 250,
       fields: "resources(brand), nextPageToken",
     });
 

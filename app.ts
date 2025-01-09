@@ -11,6 +11,7 @@ import campaignRoutes from "./routes/campaignRoutes/campaignRoutes";
 import campaignUpdateTypes from "./routes/campaignRoutes/updateCampaignRoutes";
 import conversionRoutes from "./routes/conversionRoutes/conversionRoutes";
 import appGeneralRoutes from "./routes/others/otherRoutes";
+import promotionsRoutes from "./routes/promotionsRoutes/promotionRoutes";
 import stripeRoutes from "./routes/stripeRoutes/stripeRoutes";
 
 dotenv.config();
@@ -21,8 +22,8 @@ const corsOptions = {
   origin: [
     "https://query-level-bbd02bb2f6c4.herokuapp.com",
     "https://querylevel.com",
-    "https://509764d3e47f.ngrok.app",
-    "https://255a408416fe.ngrok.app",
+    "https://7721a9ebbfa9.ngrok.app",
+    "https://980be712ff63.ngrok.app",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -49,6 +50,7 @@ app.use("/api/conversionActions", conversionRoutes);
 app.use("/api/campaignActions", campaignRoutes);
 app.use("/api/campaignActions/campaignCriterion", campaignCriterionRoutes);
 app.use("/api/campaignActions/updateCampaignTypes", campaignUpdateTypes);
+app.use("/api/promotions", promotionsRoutes);
 app.use("/api/plans", stripeRoutes);
 
 const PORT = process.env.PORT || 5000;

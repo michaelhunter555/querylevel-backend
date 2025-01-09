@@ -28,6 +28,7 @@ export const getAppAnalyticsQuery = (segment: string) => {
   campaign.advertising_channel_type,
   campaign.resource_name,
   campaign.status,
+  campaign.optimization_score,
   segments.product_title,
   metrics.conversions,
   metrics.conversions_value,

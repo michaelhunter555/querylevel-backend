@@ -1,14 +1,11 @@
-import {
-  Request,
-  Response,
-} from 'express';
-import { errors } from 'google-ads-api';
+import { Request, Response } from "express";
+import { errors } from "google-ads-api";
 
-import { getClient } from '../../lib/getClient';
-import { decryptData } from '../../util/encryption/decryptData';
-import { findGoogleAuthById } from '../../util/helpers/findGoogleAuthById';
-import { googleError } from '../../util/helpers/googleError';
-import { getAppAnalyticsQuery } from '../../util/queries/queries';
+import { getClient } from "../../lib/getClient";
+import { decryptData } from "../../util/encryption/decryptData";
+import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
+import { googleError } from "../../util/helpers/googleError";
+import { getAppAnalyticsQuery } from "../../util/queries/queries";
 
 export default async function (req: Request, res: Response) {
   const { id, segment } = req.query; //remove account id
@@ -41,6 +38,7 @@ export default async function (req: Request, res: Response) {
 
   try {
     result = await customer.query(query);
+    //console.log(result);
     res.status(200).json({
       analytics: result,
       createdCampaigns: googleUser?.createdCampaigns,
