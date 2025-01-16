@@ -10,8 +10,8 @@ export default async function (req: Request, res: Response) {
   //shoppingPromotion created & database Id for user
   const { shoppingPromotion } = req.body;
 
-  console.log("Id: ", id);
-  console.log("Shopping Promotion:", shoppingPromotion);
+  // console.log("Id: ", id);
+  // console.log("Shopping Promotion:", shoppingPromotion);
 
   // //connect to database to retrieve our credentials
   const googleUser = await findGoogleAuthById(id as string, res);

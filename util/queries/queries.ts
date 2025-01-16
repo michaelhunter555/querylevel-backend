@@ -462,3 +462,58 @@ export const getCurrentAdSchedule = (campaignId: string) => {
   WHERE campaign.id = ${campaignId}
   `;
 };
+
+/**
+ * Queries for GPT Analysis
+ * Metric focused queries for GPT analysis
+ */
+
+export const analyzeTotalShoppingPerformance = (segment: string) => {
+  return `
+  SELECT
+   segments.product_title,
+   segments.date,
+   campaign.advertising_channel_type,
+   campaign.status,
+  metrics.conversions,
+  metrics.conversions_value,
+  metrics.clicks,
+  metrics.cost_micros,
+  metrics.cost_per_conversion,
+  metrics.ctr,
+  metrics.impressions,
+  metrics.average_cpc
+  FROM shopping_performance_view
+  WHERE
+  campaign.status = 'ENABLED'
+  AND campaign.advertising_channel_type = 'SHOPPING'
+  AND segments.date DURING ${segment}
+  ORDER BY
+  segments.date ASC`;
+};
+
+export const analyzeProductGroupView = (
+  adGroupId: string | number,
+  segment: string
+) => {
+  return `
+SELECT
+ad_group_criterion.type,
+metrics.benchmark_average_max_cpc,
+metrics.benchmark_ctr,
+metrics.search_click_share,
+metrics.search_impression_share,
+metrics.clicks, 
+  metrics.conversions, 
+  metrics.cost_micros, 
+  metrics.ctr,
+  metrics.conversions_value, 
+  metrics.impressions, 
+  metrics.average_cpc,
+  ad_group.id
+  FROM product_group_view 
+WHERE
+  ad_group_criterion.type = 'LISTING_GROUP' 
+  AND ad_group.id = ${adGroupId}
+  AND segments.date DURING ${segment}`;
+};

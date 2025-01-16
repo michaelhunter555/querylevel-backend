@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 
 import adGroupCriterionRoutes from "./routes/adGroupRoutes/adGroupCriterionRoutes";
 import adGroupRoutes from "./routes/adGroupRoutes/adGroupRoutes";
+import aiRoutes from "./routes/aiRoutes/aiRoutes";
 import reportRoutes from "./routes/campaignReportRoutes/campaignReportRoutes";
 import campaignCriterionRoutes from "./routes/campaignRoutes/campaignCriterionRoutes";
 import campaignRoutes from "./routes/campaignRoutes/campaignRoutes";
@@ -22,8 +23,8 @@ const corsOptions = {
   origin: [
     "https://query-level-bbd02bb2f6c4.herokuapp.com",
     "https://querylevel.com",
-    "https://7721a9ebbfa9.ngrok.app",
-    "https://980be712ff63.ngrok.app",
+    "https://2ada38949a09.ngrok.app",
+    "https://2c7c57444d17.ngrok.app",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
 
 app.use("/api", appGeneralRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/ai", aiRoutes);
 app.use("/api/adGroupActions/adGroup", adGroupRoutes);
 app.use("/api/adGroupActions/AdGroupCriterionActions", adGroupCriterionRoutes);
 app.use("/api/conversionActions", conversionRoutes);
