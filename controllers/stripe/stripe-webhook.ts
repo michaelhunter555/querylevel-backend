@@ -126,6 +126,7 @@ export default async function (req: Request, res: Response) {
               user.startPlan = startPeriod;
               user.stripeSubscriptionId = String(session.subscription);
               user.planExpiryDate = endPeriod;
+              user.gptQuota = user.planType === "growing" ? 0 : 10;
 
               if (session?.metadata?.planType === "pro") {
                 //if metadata.prevPlanPayAsGo ? user.campaign = user.campaign += 15 : user.campaign = 15;
@@ -186,6 +187,7 @@ export default async function (req: Request, res: Response) {
                   user?.planType === "growing" ? 10 : Infinity;
               }
               user.createdCampaigns = 0;
+              user.gptQuota = user?.planType === "growing" ? 0 : 10;
             }
             await user.save();
           }

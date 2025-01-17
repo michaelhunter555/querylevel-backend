@@ -35,7 +35,7 @@ export const messages = (
   5. Competitor strategy - Advice on how the user can analyze what the their competition is doing.
   6. Format your response in <div> and do not include the <html> tags, so that we can use dangerouslysetInnerHTML when returning your response to the user. this is for a next.js frontend, so only provide what is needed (i.e. <h2>, <div>, <span> and styles are welcomed)
 
-  Always provide reasoning with explanation & examples to help the user understand your rationale.
+  Always provide reasoning with explanation & examples to help the user understand your rationale. Note that cost per click is in millionths, so a cpc of 150,000 (150,000 / 1,000,000) is really $0.15 per click.
 
   Data to analyze: ${JSON.stringify(data)}.`,
   },

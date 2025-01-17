@@ -19,6 +19,15 @@ export default async function (req: Request, res: Response) {
   //retrieve encrypted tokens and decrypt them
   const user = await findGoogleAuthById(String(id), res);
 
+  if (user.gptQuota === 0) {
+    return res
+      .status(401)
+      .json({
+        message: "You have used your all your monthly quota :(",
+        ok: false,
+      });
+  }
+
   //decrypted user data
   const refresh_token = decryptData(user?.refresh_token);
   const customer_id = decryptData(user?.googleAccountId);
@@ -61,6 +70,7 @@ export default async function (req: Request, res: Response) {
 
       //save the Id to user for association
       user.AIFeedback.push(ai?._id);
+      user.gptQuota = user.gptQuota - 1;
       await user.save();
     }
 

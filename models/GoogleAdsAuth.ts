@@ -21,6 +21,7 @@ export interface GoogleAuth extends mongoose.Document {
   totalCreatedCampaigns?: number;
   billingHistory?: mongoose.Schema.Types.ObjectId[];
   AIFeedback?: mongoose.Schema.Types.ObjectId[];
+  gptQuota?: number;
 }
 
 const GoogleSchema = new mongoose.Schema<GoogleAuth>(
@@ -63,6 +64,7 @@ const GoogleSchema = new mongoose.Schema<GoogleAuth>(
         ref: "QueryGPT",
       },
     ],
+    gptQuota: { type: Number, required: true, default: 3 },
   },
   { timestamps: true }
 );
