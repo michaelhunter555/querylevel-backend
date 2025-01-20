@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import QueryGPT from "../../models/QueryGPT";
 import { decryptData } from "../../util/encryption/decryptData";
+import { findGoogleAuthById } from "../../util/helpers/findGoogleAuthById";
 
 export default async function (req: Request, res: Response) {
   const { id, page, limit } = req.query;
@@ -10,6 +11,7 @@ export default async function (req: Request, res: Response) {
   const limitNum: number = Math.max(parseInt(String(limit), 10), 10) || 10;
 
   try {
+    const user = await findGoogleAuthById(String(id), res);
     //get response and break down how many we'll grab
     const queryAiResponses = await QueryGPT.find({ userId: String(id) })
       .sort({ date: -1 })
@@ -44,6 +46,7 @@ export default async function (req: Request, res: Response) {
       pageNum,
       totalPages,
       totalFeedback,
+      gptQuota: user?.gptQuota,
       ok: true,
     });
   } catch (err) {
