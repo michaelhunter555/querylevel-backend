@@ -29,6 +29,9 @@ export default async function (req: Request, res: Response) {
   const { id, segment } = req.query;
   const { campaignId, brand, operationLevel } = req.body;
 
+  console.log("query", req.query);
+  console.log("body", req.body);
+
   //get user information
   const user = await findGoogleAuthById(id as string, res);
 
@@ -67,7 +70,7 @@ export default async function (req: Request, res: Response) {
     campaign.status = 'ENABLED'
     AND campaign.advertising_channel_type = 'SHOPPING'
         AND segments.date DURING ${segment}
-        AND campaign.id = ${campaignId}
+        AND campaign.id = ${campaignId.split(":")[1]}
         `;
 
   let searchTerms: any[] = [];
@@ -78,14 +81,15 @@ export default async function (req: Request, res: Response) {
     if (err instanceof errors.GoogleAdsFailure) {
       googleError(err);
     }
-    res.status(500).json({ message: err });
+    return res.status(500).json({ message: err });
   }
   const negativeKeywordOperation: MutateOperation<
     resources.ICampaignCriterion | resources.IAdGroupCriterion
   >[] = [];
 
-  //user inputs brand
+  resources.Campaign;
 
+  //user inputs brand
   const products = await getActiveShoppingData(
     brand,
     accessToken,
@@ -116,8 +120,14 @@ export default async function (req: Request, res: Response) {
   }
 
   try {
+    console.log(
+      "NegativeKeywords to add",
+      negativeKeywordOperation
+        .slice(0, 10)
+        .map((keyword, i) => keyword.resource.keyword)
+    );
     if (negativeKeywordOperation.length > 0) {
-      await customer.mutateResources(negativeKeywordOperation);
+      //await customer.mutateResources(negativeKeywordOperation);
     }
     res.status(201).json({
       message: "Service Complete.",

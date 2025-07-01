@@ -13,6 +13,7 @@ import campaignUpdateTypes from "./routes/campaignRoutes/updateCampaignRoutes";
 import conversionRoutes from "./routes/conversionRoutes/conversionRoutes";
 import appGeneralRoutes from "./routes/others/otherRoutes";
 import promotionsRoutes from "./routes/promotionsRoutes/promotionRoutes";
+import searchTermServiceRoutes from "./routes/searchTermService/searchTermServiceRoutes";
 import stripeRoutes from "./routes/stripeRoutes/stripeRoutes";
 
 dotenv.config();
@@ -23,8 +24,8 @@ const corsOptions = {
   origin: [
     "https://query-level-bbd02bb2f6c4.herokuapp.com",
     "https://querylevel.com",
-    "https://2ada38949a09.ngrok.app",
-    "https://2c7c57444d17.ngrok.app",
+    "https://4acd457ee877.ngrok.app",
+    "https://71bb1fb8300e.ngrok.app",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -54,6 +55,7 @@ app.use("/api/campaignActions/campaignCriterion", campaignCriterionRoutes);
 app.use("/api/campaignActions/updateCampaignTypes", campaignUpdateTypes);
 app.use("/api/promotions", promotionsRoutes);
 app.use("/api/plans", stripeRoutes);
+app.use("/api/search-term-service", searchTermServiceRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI: string | undefined = process.env.MONGO_DB_URI;
