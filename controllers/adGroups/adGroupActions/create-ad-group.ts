@@ -16,7 +16,7 @@ import { googleError } from "../../../util/helpers/googleError";
 export default async function (req: Request, res: Response) {
   const { id } = req.query;
   const { adGroup } = req.body;
-
+  // hello
   const user = await findGoogleAuthById(id as string, res);
   const refreshToken = decryptData(user?.refresh_token);
   const googleAccountId = decryptData(user?.googleAccountId);
